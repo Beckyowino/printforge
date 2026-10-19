@@ -4,22 +4,38 @@ export default function PaginationControls({totalPages, currentPage}:{
   totalPages:number,
   currentPage:number
 }){
-  //[1, 2, 3, 4, 5]
-  const pagesArray = Array.from({length:totalPages}, (_,i) => i + 1)
+   const startPage = Math.max(1, currentPage - 1)
+  const endPage = Math.min(totalPages, currentPage + 1)
+  const pages = []
+
+  for (let page = startPage; page <= endPage; page++) {
+    pages.push(page)
+  }
+
   return (
-    <div className="flex justify-center gap-1">  
-      {currentPage !== 1 && (
-        <PaginationButton page={1} label="<<"/>
+    <div className="flex items-center gap-2">
+      {startPage > 1 && (
+        <PaginationButton
+          page={1}
+          label="<<"
+          isActive={false}
+        />
       )}
-      {currentPage !== 1 && (
-        <PaginationButton page={currentPage-1}/>
-      )}
-      <PaginationButton page={currentPage} isActive={true}/>
-      {currentPage !== totalPages && (
-        <PaginationButton page={currentPage+1}/>
-      )}
-      {currentPage !== totalPages && (
-        <PaginationButton page={totalPages} label=">>"/>
+
+      {pages.map((page) => (
+        <PaginationButton
+          key={page}
+          page={page}
+          isActive={page === currentPage}
+        />
+      ))}
+
+      {endPage < totalPages && (
+        <PaginationButton
+          page={totalPages}
+          label=">>"
+          isActive={false}
+        />
       )}
     </div>
   )
